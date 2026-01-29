@@ -15,6 +15,14 @@ from typing import List, Optional
 import pandas as pd
 
 try:
+    from embeddings.run_embeddings import run_embeddings_pipeline
+except Exception as error:  # pragma: no cover - optional dependency warning
+    run_embeddings_pipeline = None  # type: ignore[assignment]
+    EMBEDDINGS_IMPORT_ERROR = error
+else:  # pragma: no cover - track error-free import
+    EMBEDDINGS_IMPORT_ERROR = None
+
+try:
     from classification.run_classification import run_classification_pipeline
 except Exception as error:  # pragma: no cover - optional dependency warning
     run_classification_pipeline = None  # type: ignore[assignment]
@@ -242,6 +250,24 @@ def main(raw_args: Optional[List[str]] = None) -> None:
     run_dir, timestamp = create_run_directory()
     augmented_dataset = augment_dataset(dataset)
     persist_dataset(augmented_dataset, run_dir)
+
+    embeddings_help = "Install required packages via: pip install sentence-transformers torch umap-learn scikit-learn pyarrow"
+    if run_embeddings_pipeline is None:
+        print(
+            "[Runner] Embeddings pipeline not available. "
+            f"{EMBEDDINGS_IMPORT_ERROR} | {embeddings_help}"
+        )
+    else:
+        print("[Runner] Embeddings started...")
+        try:
+            run_embeddings_pipeline(dataset=augmented_dataset, run_dir=run_dir)
+        except RuntimeError as embeddings_error:
+            print(f"[Runner] Embeddings skipped: {embeddings_error} | {embeddings_help}")
+        except Exception as embeddings_error:
+            print(f"[Runner] Embeddings failed: {embeddings_error}")
+            raise
+        else:
+            print(f"[Runner] Embeddings finished. Outputs saved to {run_dir / 'embeddings'}")
 
     write_manifest(
         run_dir=run_dir,

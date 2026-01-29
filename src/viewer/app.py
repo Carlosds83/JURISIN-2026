@@ -10,6 +10,7 @@ from typing import Dict, List, Optional, Tuple
 import numpy as np
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
 
 from theme import (
@@ -95,6 +96,7 @@ SCATTER_COLOR_OPTIONS = [
 ]
 PARALLEL_COLOR_OPTIONS = ["Law", "High/Low risk_score", "High/Low complexity_score"]
 NOT_MAPPED_OPTION = "-- Not mapped --"
+EMBEDDING_PLOT_TYPES = ["Scatter", "Centroids overlay", "KDE"]
 
 
 def normalize_token(value: str) -> str:
@@ -127,6 +129,67 @@ def load_base_dataset(run_dir: Path) -> Optional[pd.DataFrame]:
     except (ImportError, ValueError):
         st.error("Unable to read Parquet. Install pyarrow or fastparquet in this environment.")
         return None
+
+
+def load_embeddings_manifest(run_dir: Path) -> Optional[Dict[str, object]]:
+    manifest_path = run_dir / "embeddings" / "embeddings_manifest.json"
+    if not manifest_path.exists():
+        return None
+    try:
+        data = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if isinstance(data, dict):
+            return data
+    except json.JSONDecodeError:
+        return None
+    return None
+
+
+def load_embedding_rules(run_dir: Path) -> List[Dict[str, object]]:
+    rules_path = run_dir / "embeddings" / "groups" / "rules.json"
+    if not rules_path.exists():
+        return []
+    try:
+        data = json.loads(rules_path.read_text(encoding="utf-8"))
+        if isinstance(data, list):
+            return [rule for rule in data if isinstance(rule, dict)]
+    except json.JSONDecodeError:
+        return []
+    return []
+
+
+def load_rule_labels(run_dir: Path, relative_path: str) -> Optional[pd.DataFrame]:
+    labels_path = (run_dir / "embeddings" / relative_path).resolve()
+    if not labels_path.exists():
+        return None
+    try:
+        return pd.read_parquet(labels_path)
+    except (ImportError, ValueError):
+        st.error("Unable to read embeddings labels. Install pyarrow or fastparquet.")
+        return None
+
+
+def load_projection_dataframe(run_dir: Path, relative_path: str) -> Optional[pd.DataFrame]:
+    projection_path = (run_dir / "embeddings" / relative_path).resolve()
+    if not projection_path.exists():
+        return None
+    try:
+        return pd.read_parquet(projection_path)
+    except (ImportError, ValueError):
+        st.error("Unable to read projection coordinates. Install pyarrow or fastparquet.")
+        return None
+
+
+def load_embedding_stats(run_dir: Path, embedding_id: str, projection: str, rule_id: str) -> Optional[Dict[str, object]]:
+    stats_path = run_dir / "embeddings" / "stats" / f"stats_{embedding_id}_{projection}_{rule_id}.json"
+    if not stats_path.exists():
+        return None
+    try:
+        data = json.loads(stats_path.read_text(encoding="utf-8"))
+        if isinstance(data, dict):
+            return data
+    except json.JSONDecodeError:
+        return None
+    return None
 
 
 def build_control_key(run_name: str, suffix: str) -> str:
@@ -1494,6 +1557,247 @@ def render_classification_tab(
         render_classification_results(run_key, experiment_id, target, artifacts, tooltips, palette)
 
 
+def _build_group_color_map(rule_meta: Dict[str, object], palette: Dict[str, Dict[str, object]]) -> Dict[str, str]:
+    positive = str(rule_meta.get("positive_label", "Group A"))
+    negative = str(rule_meta.get("negative_label", "Group B"))
+    color_map = {
+        positive: get_series_color(palette, "true"),
+        negative: get_series_color(palette, "pred"),
+    }
+    return color_map
+
+
+def _locate_row(dataset: Optional[pd.DataFrame], row_id: str, row_id_column: Optional[str]) -> Optional[pd.Series]:
+    if dataset is None or row_id_column is None:
+        return None
+    if row_id_column == "__index__":
+        mask = dataset.index.astype(str) == row_id
+        if mask.any():
+            return dataset.loc[mask].iloc[0]
+        return None
+    if row_id_column not in dataset.columns:
+        return None
+    mask = dataset[row_id_column].astype(str) == row_id
+    if mask.any():
+        return dataset.loc[mask].iloc[0]
+    return None
+
+
+def _render_embeddings_chart(
+    plot_df: pd.DataFrame,
+    plot_type: str,
+    color_map: Dict[str, str],
+    palette: Dict[str, Dict[str, object]],
+) -> None:
+    if plot_type == "Scatter":
+        fig = px.scatter(
+            plot_df,
+            x="x",
+            y="y",
+            color="group_label",
+            hover_data=["row_id"],
+            color_discrete_map=color_map,
+        )
+        apply_plot_theme(fig, palette)
+        st.plotly_chart(fig, use_container_width=True)
+        return
+
+    if plot_type == "Centroids overlay":
+        fig = px.scatter(
+            plot_df,
+            x="x",
+            y="y",
+            color="group_label",
+            hover_data=["row_id"],
+            opacity=0.4,
+            color_discrete_map=color_map,
+        )
+        centroids = plot_df.groupby("group_label")[["x", "y"]].mean().reset_index()
+        for _, row in centroids.iterrows():
+            fig.add_trace(
+                go.Scatter(
+                    x=[row["x"]],
+                    y=[row["y"]],
+                    mode="markers+text",
+                    text=[row["group_label"]],
+                    textposition="top center",
+                    marker_symbol="x",
+                    marker_size=18,
+                    marker_color=color_map.get(row["group_label"], get_series_color(palette, "true")),
+                    name=f"{row['group_label']} centroid",
+                )
+            )
+        apply_plot_theme(fig, palette)
+        st.plotly_chart(fig, use_container_width=True)
+        return
+
+    if plot_type == "KDE":
+        fig = px.density_contour(
+            plot_df,
+            x="x",
+            y="y",
+            color="group_label",
+            color_discrete_map=color_map,
+            hover_data=["row_id"],
+            contours_coloring="fill",
+        )
+        apply_plot_theme(fig, palette)
+        st.plotly_chart(fig, use_container_width=True)
+        return
+
+
+def render_text_inspector(
+    run_key: str,
+    dataset: Optional[pd.DataFrame],
+    manifest: Dict[str, object],
+    row_ids: List[str],
+    tooltips: Dict[str, str],
+):
+    with st.expander("Text inspector", expanded=False):
+        render_tooltip("embeddings.text_inspector", tooltips)
+        if not row_ids:
+            st.info("Select a projection above to load row ids.")
+            return
+        selector = st.selectbox(
+            "Row identifier",
+            row_ids,
+            key=build_control_key(run_key, "embeddings_row_selector"),
+        )
+        render_tooltip("embeddings.row_selector", tooltips)
+        row_id_column = manifest.get("row_id_column")
+        snapshot = _locate_row(dataset, selector, row_id_column if isinstance(row_id_column, str) else None)
+        if snapshot is None:
+            st.info("Row not found in base_modificada. Verify the manifest mappings.")
+            return
+        text_column = manifest.get("text_column")
+        if isinstance(text_column, str) and text_column in snapshot.index:
+            st.text_area("Document text", str(snapshot[text_column]), height=200)
+        else:
+            st.write("Text column not available in dataset.")
+        mapping = infer_initial_mapping(dataset) if dataset is not None else {}
+        law_column = mapping.get("law")
+        if law_column and law_column in snapshot.index:
+            st.write(f"**Law:** {snapshot[law_column]}")
+        trigger_values = []
+        for key in BINARY_KEYS:
+            column = mapping.get(key)
+            if column and column in snapshot.index:
+                trigger_values.append(
+                    {
+                        "Trigger": CONCEPTS[key]["label"],
+                        "Value": snapshot[column],
+                    }
+                )
+        if trigger_values:
+            st.table(pd.DataFrame(trigger_values))
+
+
+def render_embeddings_tab(
+    run_key: str,
+    run_dir: Path,
+    dataset: Optional[pd.DataFrame],
+    tooltips: Dict[str, str],
+    palette: Dict[str, Dict[str, object]],
+):
+    st.header("Embeddings")
+    render_tooltip("embeddings.screen", tooltips)
+    manifest = load_embeddings_manifest(run_dir)
+    if not manifest:
+        st.info("No embeddings outputs found for this run.")
+        return
+    models = manifest.get("models") or []
+    if not models:
+        st.info("Embeddings manifest does not list any models.")
+        return
+
+    model_labels = [f"{entry.get('model_name', 'Unknown')} ({entry.get('embedding_id')})" for entry in models]
+    selected_model_label = st.selectbox(
+        "Embedding model",
+        model_labels,
+        key=build_control_key(run_key, "embeddings_model_select"),
+    )
+    render_tooltip("embeddings.selector_model", tooltips)
+    selected_model = models[model_labels.index(selected_model_label)]
+
+    projections = selected_model.get("projections") or {}
+    if not projections:
+        st.info("No projections registered for the selected model.")
+        return
+    projection_names = sorted(projections.keys())
+    selected_projection = st.selectbox(
+        "Projection type",
+        projection_names,
+        key=build_control_key(run_key, "embeddings_projection_select"),
+    )
+    render_tooltip("embeddings.selector_projection", tooltips)
+
+    rules = load_embedding_rules(run_dir)
+    if not rules:
+        st.info("No comparison rules found. Ensure rules.json exists in embeddings/groups.")
+        return
+    rule_labels = [f"{rule.get('description', rule.get('rule_id'))}" for rule in rules]
+    selected_rule_label = st.selectbox(
+        "Comparison rule",
+        rule_labels,
+        key=build_control_key(run_key, "embeddings_rule_select"),
+    )
+    render_tooltip("embeddings.selector_rule", tooltips)
+    selected_rule = rules[rule_labels.index(selected_rule_label)]
+
+    plot_type = st.selectbox(
+        "Plot type",
+        EMBEDDING_PLOT_TYPES,
+        key=build_control_key(run_key, "embeddings_plot_type"),
+    )
+    render_tooltip("embeddings.selector_plot", tooltips)
+
+    projection_rel_path = projections.get(selected_projection)
+    if not projection_rel_path:
+        st.info("Projection file not listed in manifest.")
+        return
+    projection_df = load_projection_dataframe(run_dir, projection_rel_path)
+    if projection_df is None or projection_df.empty:
+        st.info("Projection coordinates could not be loaded.")
+        return
+
+    labels_rel_path = selected_rule.get("labels_path")
+    if not isinstance(labels_rel_path, str):
+        st.info("Rule labels path missing in rules.json.")
+        return
+    labels_df = load_rule_labels(run_dir, labels_rel_path)
+    if labels_df is None or labels_df.empty:
+        st.info("Labels file is empty or missing required columns.")
+        return
+
+    merged = projection_df.merge(labels_df, on="row_id", how="inner")
+    merged = merged.dropna(subset=["x", "y", "group_label"])
+    if merged.empty:
+        st.info("No overlapping rows found between projection and labels.")
+        return
+
+    color_map = _build_group_color_map(selected_rule, palette)
+    with st.expander("Projection explorer", expanded=True):
+        render_tooltip("embeddings.plot_section", tooltips)
+        _render_embeddings_chart(merged, plot_type, color_map, palette)
+        stats = load_embedding_stats(
+            run_dir,
+            str(selected_model.get("embedding_id")),
+            selected_projection,
+            str(selected_rule.get("rule_id")),
+        )
+        if stats:
+            render_tooltip("embeddings.stats_note", tooltips)
+            distance = stats.get("centroid_distance")
+            sizes = stats.get("group_sizes", {})
+            st.caption(
+                f"Centroid distance: {distance:.4f} | Group sizes: {sizes}"
+                if isinstance(distance, (int, float))
+                else f"Group sizes: {sizes}"
+            )
+    unique_rows = merged["row_id"].dropna().astype(str).unique().tolist()
+    render_text_inspector(run_key, dataset, manifest, unique_rows, tooltips)
+
+
 def render_placeholder_tab(title: str):
     st.header(title)
     st.info("This section will be implemented in a future milestone.")
@@ -1524,7 +1828,7 @@ def main() -> None:
     with tabs[1]:
         render_classification_tab(selected_name, selected_run, tooltips, palette)
     with tabs[2]:
-        render_placeholder_tab("Embeddings")
+        render_embeddings_tab(selected_name, selected_run, dataset, tooltips, palette)
     with tabs[3]:
         render_placeholder_tab("Sensitivity")
     with tabs[4]:
