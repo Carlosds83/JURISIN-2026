@@ -1,0 +1,61 @@
+text,Relevance,Completeness,differential_regime,Discretionality,Interpretability,Law,article_id
+Relevance low case #1,1,0,0,0,1,Law B,ART-001
+Completeness issue #2,0,1,0,0,2,Law C,ART-002
+Differential policy #3,1,1,1,0,0,Law A,ART-003
+Discretion notes #4,0,0,1,1,1,Law B,ART-004
+Interpretability sample #5,1,0,1,1,2,Law C,ART-005
+Relevance high case #6,0,1,0,1,0,Law A,ART-006
+Relevance low case #7,1,1,0,1,1,Law B,ART-007
+Completeness issue #8,0,0,0,0,2,Law C,ART-008
+Differential policy #9,1,0,1,0,0,Law A,ART-009
+Discretion notes #10,0,1,1,0,1,Law B,ART-010
+Interpretability sample #11,1,1,1,0,2,Law C,ART-011
+Relevance high case #12,0,0,0,1,0,Law A,ART-012
+Relevance low case #13,1,0,0,1,1,Law B,ART-013
+Completeness issue #14,0,1,0,1,2,Law C,ART-014
+Differential policy #15,1,1,1,1,0,Law A,ART-015
+Discretion notes #16,0,0,1,0,1,Law B,ART-016
+Interpretability sample #17,1,0,1,0,2,Law C,ART-017
+Relevance high case #18,0,1,0,0,0,Law A,ART-018
+Relevance low case #19,1,1,0,0,1,Law B,ART-019
+Completeness issue #20,0,0,0,1,2,Law C,ART-020
+Differential policy #21,1,0,1,1,0,Law A,ART-021
+Discretion notes #22,0,1,1,1,1,Law B,ART-022
+Interpretability sample #23,1,1,1,1,2,Law C,ART-023
+Relevance high case #24,0,0,0,0,0,Law A,ART-024
+Relevance low case #25,1,0,0,0,1,Law B,ART-025
+Completeness issue #26,0,1,0,0,2,Law C,ART-026
+Differential policy #27,1,1,1,0,0,Law A,ART-027
+Discretion notes #28,0,0,1,1,1,Law B,ART-028
+Interpretability sample #29,1,0,1,1,2,Law C,ART-029
+Relevance high case #30,0,1,0,1,0,Law A,ART-030
+Relevance low case #31,1,1,0,1,1,Law B,ART-031
+Completeness issue #32,0,0,0,0,2,Law C,ART-032
+Differential policy #33,1,0,1,0,0,Law A,ART-033
+Discretion notes #34,0,1,1,0,1,Law B,ART-034
+Interpretability sample #35,1,1,1,0,2,Law C,ART-035
+Relevance high case #36,0,0,0,1,0,Law A,ART-036
+Relevance low case #37,1,0,0,1,1,Law B,ART-037
+Completeness issue #38,0,1,0,1,2,Law C,ART-038
+Differential policy #39,1,1,1,1,0,Law A,ART-039
+Discretion notes #40,0,0,1,0,1,Law B,ART-040
+Interpretability sample #41,1,0,1,0,2,Law C,ART-041
+Relevance high case #42,0,1,0,0,0,Law A,ART-042
+Relevance low case #43,1,1,0,0,1,Law B,ART-043
+Completeness issue #44,0,0,0,1,2,Law C,ART-044
+Differential policy #45,1,0,1,1,0,Law A,ART-045
+Discretion notes #46,0,1,1,1,1,Law B,ART-046
+Interpretability sample #47,1,1,1,1,2,Law C,ART-047
+Relevance high case #48,0,0,0,0,0,Law A,ART-048
+Relevance low case #49,1,0,0,0,1,Law B,ART-049
+Completeness issue #50,0,1,0,0,2,Law C,ART-050
+Differential policy #51,1,1,1,0,0,Law A,ART-051
+Discretion notes #52,0,0,1,1,1,Law B,ART-052
+Interpretability sample #53,1,0,1,1,2,Law C,ART-053
+Relevance high case #54,0,1,0,1,0,Law A,ART-054
+Relevance low case #55,1,1,0,1,1,Law B,ART-055
+Completeness issue #56,0,0,0,0,2,Law C,ART-056
+Differential policy #57,1,0,1,0,0,Law A,ART-057
+Discretion notes #58,0,1,1,0,1,Law B,ART-058
+Interpretability sample #59,1,1,1,0,2,Law C,ART-059
+Relevance high case #60,0,0,0,1,0,Law A,ART-060

@@ -1,0 +1,88 @@
+# =====================
+# Python
+# =====================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+
+# =====================
+# Jupyter / Notebooks
+# =====================
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+# =====================
+# IDEs / Editors
+# =====================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =====================
+# OS files
+# =====================
+.DS_Store
+Thumbs.db
+
+# =====================
+# Logs & outputs
+# =====================
+*.log
+logs/
+output/
+outputs/
+results/
+
+# =====================
+# Experiments / ML runs
+# =====================
+runs/
+wandb/
+mlruns/
+lightning_logs/
+
+# =====================
+# Models & checkpoints
+# =====================
+models/
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+*.joblib
+*.pkl
+
+# =====================
+# Reports & figures (opcional)
+# =====================
+reports/
+figures/
+plots/
+
+# =====================
+# Secrets & credentials
+# =====================
+.env.*
+*.key
+*.pem
+credentials.json
+secrets.json
+
+# =====================
+# Packaging
+# =====================
+build/
+dist/
+*.egg-info/
+
+# =====================
+# Cache
+# =====================
+.cache/

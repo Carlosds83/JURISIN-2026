@@ -1,0 +1,7 @@
+﻿text,Relevance,Completeness,differential_regime,Discretionality,Interpretability,Law,article_id
+"Texto explicativo sobre relevancia fiscal",1,0,0,1,0,Ley 1,ART-001
+"Articulo que habla de regimen diferencial",0,1,1,0,1,Ley 2,ART-002
+"Descripción de discrecionalidad alta",1,1,0,1,2,Ley 3,ART-003
+"Resumen de reglas generales",0,0,0,0,1,Ley 2,ART-004
+"Análisis interpretativo avanzado",1,1,1,1,2,Ley 4,ART-005
+"Caso adicional para balance",0,0,0,0,0,Ley 1,ART-006

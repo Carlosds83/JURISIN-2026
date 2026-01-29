@@ -1,0 +1,23 @@
+base:
+  background: "#FFFFBF"
+  text: "#111111"
+  muted: "#7C9C7D"
+
+series:
+  true: "#32612D"
+  pred: "#E00F5E"
+
+accent:
+  primary: "#8F002C"
+  secondary: "#028A0F"
+
+triggers:
+  interpretability: "#8F002C"
+  relevance: "#32612D"
+  completeness: "#028A0F"
+  differential_regime: "#E00F5E"
+  discretionality: "#7C9C7D"
+
+risk:
+  low: "#7C9C7D"
+  high: "#8F002C"
