@@ -1,0 +1,6 @@
+target,text_col,model,n_rows_used,n_train,n_test,accuracy,precision_macro,recall_macro,f1_macro,classes
+Relevance,Spanish text,mrm8488/legalectra-base-spanish,169,135,34,0.4117647058823529,0.20588235294117646,0.5,0.2916666666666667,"0,1"
+Interpretability,Spanish text,mrm8488/legalectra-base-spanish,169,135,34,0.47058823529411764,0.1568627450980392,0.3333333333333333,0.2133333333333333,"1,2,3"
+Completeness,Spanish text,mrm8488/legalectra-base-spanish,169,135,34,0.2647058823529412,0.1323529411764706,0.5,0.20930232558139536,"0,1"
+Differential Regime,Spanish text,mrm8488/legalectra-base-spanish,169,135,34,0.35294117647058826,0.17647058823529413,0.5,0.2608695652173913,"0,1"
+Discretionality,Spanish text,mrm8488/legalectra-base-spanish,169,135,34,0.5588235294117647,0.27941176470588236,0.5,0.3584905660377359,"0,1"

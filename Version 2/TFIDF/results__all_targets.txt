@@ -1,0 +1,5 @@
+Relevance | n=169 acc=0.764706 prec_macro=0.757143 recall_macro=0.757143 f1_macro=0.757143 classes=0,1
+Interpretability | n=169 acc=0.470588 prec_macro=0.261905 recall_macro=0.342803 f1_macro=0.271717 classes=1,2,3
+Completeness | n=169 acc=0.823529 prec_macro=0.813793 recall_macro=0.702222 f1_macro=0.730159 classes=0,1
+Differential Regime | n=169 acc=0.882353 prec_macro=0.867857 recall_macro=0.890152 f1_macro=0.875458 classes=0,1
+Discretionality | n=169 acc=0.764706 prec_macro=0.765568 recall_macro=0.754386 f1_macro=0.757143 classes=0,1

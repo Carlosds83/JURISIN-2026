@@ -1,0 +1,6 @@
+MODEL=mrm8488/legalectra-base-spanish
+Relevance | n=169 acc=0.411765 prec_macro=0.205882 recall_macro=0.500000 f1_macro=0.291667 classes=0,1
+Interpretability | n=169 acc=0.470588 prec_macro=0.156863 recall_macro=0.333333 f1_macro=0.213333 classes=1,2,3
+Completeness | n=169 acc=0.264706 prec_macro=0.132353 recall_macro=0.500000 f1_macro=0.209302 classes=0,1
+Differential Regime | n=169 acc=0.352941 prec_macro=0.176471 recall_macro=0.500000 f1_macro=0.260870 classes=0,1
+Discretionality | n=169 acc=0.558824 prec_macro=0.279412 recall_macro=0.500000 f1_macro=0.358491 classes=0,1

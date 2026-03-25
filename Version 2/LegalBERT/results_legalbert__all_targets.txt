@@ -1,0 +1,6 @@
+MODEL=nlpaueb/legal-bert-base-uncased
+Relevance | n=169 acc=0.735294 prec_macro=0.748889 recall_macro=0.700000 f1_macro=0.704348 classes=0,1
+Interpretability | n=169 acc=0.470588 prec_macro=0.331263 recall_macro=0.361742 f1_macro=0.333333 classes=1,2,3
+Completeness | n=169 acc=0.823529 prec_macro=0.774704 recall_macro=0.808889 f1_macro=0.787500 classes=0,1
+Differential Regime | n=169 acc=0.735294 prec_macro=0.709486 recall_macro=0.700758 f1_macro=0.704348 classes=0,1
+Discretionality | n=169 acc=0.794118 prec_macro=0.792857 recall_macro=0.787719 f1_macro=0.789567 classes=0,1

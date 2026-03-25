@@ -1,0 +1,6 @@
+MODEL=IIC/MEL
+Relevance | n=169 acc=0.794118 prec_macro=0.800395 recall_macro=0.771429 f1_macro=0.778605 classes=0,1
+Interpretability | n=169 acc=0.529412 prec_macro=0.454762 recall_macro=0.456981 f1_macro=0.447090 classes=1,2,3
+Completeness | n=169 acc=0.794118 prec_macro=0.737500 recall_macro=0.753333 f1_macro=0.744361 classes=0,1
+Differential Regime | n=169 acc=0.823529 prec_macro=0.806818 recall_macro=0.806818 f1_macro=0.806818 classes=0,1
+Discretionality | n=169 acc=0.676471 prec_macro=0.673611 recall_macro=0.675439 f1_macro=0.673932 classes=0,1
