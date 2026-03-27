@@ -1,0 +1,7 @@
+{
+  "timestamp": "20260129T225735Z",
+  "input_dataset": "C:\\Users\\57305\\OneDrive - Universidad Nacional de Colombia\\Documentos\\GitHub\\JURISIN_2026\\JURISIN-2026\\sample_dataset.csv",
+  "row_count": 6,
+  "python_version": "3.13.7",
+  "script_name": "run_all.py"
+}

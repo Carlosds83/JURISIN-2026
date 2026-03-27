@@ -1,0 +1,42 @@
+[
+  {
+    "rule_id": "relevance_binary",
+    "description": "Relevance != 0 vs == 0",
+    "column": "Relevance",
+    "positive_label": "Relevance != 0",
+    "negative_label": "Relevance = 0",
+    "labels_path": "groups\\labels_relevance_binary.parquet"
+  },
+  {
+    "rule_id": "completeness_binary",
+    "description": "Completeness != 0 vs == 0",
+    "column": "Completeness",
+    "positive_label": "Completeness != 0",
+    "negative_label": "Completeness = 0",
+    "labels_path": "groups\\labels_completeness_binary.parquet"
+  },
+  {
+    "rule_id": "differential_regime_binary",
+    "description": "differential_regime != 0 vs == 0",
+    "column": "differential_regime",
+    "positive_label": "Differential Regime != 0",
+    "negative_label": "Differential Regime = 0",
+    "labels_path": "groups\\labels_differential_regime_binary.parquet"
+  },
+  {
+    "rule_id": "discretionality_binary",
+    "description": "Discretionality != 0 vs == 0",
+    "column": "Discretionality",
+    "positive_label": "Discretionality != 0",
+    "negative_label": "Discretionality = 0",
+    "labels_path": "groups\\labels_discretionality_binary.parquet"
+  },
+  {
+    "rule_id": "interpretability_split",
+    "description": "Interpretability == 1 vs Interpretability in {2, 3}",
+    "column": "Interpretability",
+    "positive_label": "Interpretability = 1",
+    "negative_label": "Interpretability >= 2",
+    "labels_path": "groups\\labels_interpretability_split.parquet"
+  }
+]

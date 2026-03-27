@@ -1,0 +1,36 @@
+{
+  "created_at": "2026-01-29T22:57:57.305504+00:00",
+  "text_column": "text",
+  "row_id_column": "article_id",
+  "embedding_models": [
+    "emb_f9fc7e6f31"
+  ],
+  "projections_available": [
+    "umap",
+    "tsne"
+  ],
+  "rules": [
+    "relevance_binary",
+    "completeness_binary",
+    "differential_regime_binary",
+    "discretionality_binary",
+    "interpretability_split"
+  ],
+  "folders": {
+    "embeddings": "embeddings\\embeddings",
+    "projections": "embeddings\\projections",
+    "groups": "embeddings\\groups",
+    "stats": "embeddings\\stats"
+  },
+  "models": [
+    {
+      "embedding_id": "emb_f9fc7e6f31",
+      "model_name": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "vectors_path": "embeddings\\emb_f9fc7e6f31.npz",
+      "projections": {
+        "umap": "projections\\emb_f9fc7e6f31_umap.parquet",
+        "tsne": "projections\\emb_f9fc7e6f31_tsne.parquet"
+      }
+    }
+  ]
+}

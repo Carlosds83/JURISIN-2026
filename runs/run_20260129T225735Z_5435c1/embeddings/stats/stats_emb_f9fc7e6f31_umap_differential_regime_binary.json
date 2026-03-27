@@ -1,0 +1,10 @@
+{
+  "embedding_id": "emb_f9fc7e6f31",
+  "projection": "umap",
+  "rule_id": "differential_regime_binary",
+  "centroid_distance": 0.6445788741111755,
+  "group_sizes": {
+    "0": 4,
+    "1": 2
+  }
+}

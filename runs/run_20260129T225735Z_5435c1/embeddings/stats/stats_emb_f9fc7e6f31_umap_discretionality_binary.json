@@ -1,0 +1,10 @@
+{
+  "embedding_id": "emb_f9fc7e6f31",
+  "projection": "umap",
+  "rule_id": "discretionality_binary",
+  "centroid_distance": 1.3744338750839233,
+  "group_sizes": {
+    "1": 3,
+    "0": 3
+  }
+}

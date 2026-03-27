@@ -1,0 +1,10 @@
+{
+  "embedding_id": "emb_f9fc7e6f31",
+  "projection": "umap",
+  "rule_id": "interpretability_split",
+  "centroid_distance": 0.7822360992431641,
+  "group_sizes": {
+    "0": 4,
+    "1": 2
+  }
+}

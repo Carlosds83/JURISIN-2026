@@ -1,0 +1,10 @@
+{
+  "embedding_id": "emb_f9fc7e6f31",
+  "projection": "tsne",
+  "rule_id": "completeness_binary",
+  "centroid_distance": 117.86152648925781,
+  "group_sizes": {
+    "0": 3,
+    "1": 3
+  }
+}
